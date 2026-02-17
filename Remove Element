@@ -1,0 +1,15 @@
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        # k will keep track of the index where the next non-val element should go
+        k = 0
+        
+        for i in range(len(nums)):
+            # If the current element is NOT the value we want to remove
+            if nums[i] != val:
+                # Move it to the 'k' position
+                nums[k] = nums[i]
+                # Increment k to prepare for the next valid element
+                k += 1
+                
+        # k represents the count of elements not equal to val
+        return k
