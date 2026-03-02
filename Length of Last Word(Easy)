@@ -1,0 +1,5 @@
+class Solution:
+    def lengthOfLastWord(self, s: str) -> int:
+        # split() handles multiple spaces and trailing/leading whitespace
+        words = s.split()
+        return len(words[-1])
