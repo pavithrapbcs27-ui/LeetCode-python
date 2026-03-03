@@ -1,0 +1,25 @@
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        # Stack stores indices of characters
+        # Initialize with -1 to handle the base case for length calculation
+        stack = [-1]
+        max_len = 0
+        
+        for i, char in enumerate(s):
+            if char == '(':
+                # Always push the index of an opening parenthesis
+                stack.append(i)
+            else:
+                # If we find ')', pop the last matching '(' or the last base index
+                stack.pop()
+                
+                if not stack:
+                    # If stack is empty, this ')' is an outlier. 
+                    # Push its index as the new base for future valid substrings.
+                    stack.append(i)
+                else:
+                    # If stack is not empty, calculate the length:
+                    # current index - index of the element at the top of the stack
+                    max_len = max(max_len, i - stack[-1])
+        
+        return max_len
