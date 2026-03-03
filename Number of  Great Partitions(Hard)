@@ -1,0 +1,29 @@
+class Solution:
+    def countPartitions(self, nums: List[int], k: int) -> int:
+        total_sum = sum(nums)
+        n = len(nums)
+        MOD = 10**9 + 7
+        
+        # If the total sum can't even support two groups of size k
+        if total_sum < 2 * k:
+            return 0
+        
+        # total_ways = 2^n % MOD
+        total_ways = pow(2, n, MOD)
+        
+        # dp[i] will store the number of ways to get a subset sum equal to i
+        dp = [0] * k
+        dp[0] = 1
+        
+        # Standard 0/1 Knapsack DP to find number of subsets with sum < k
+        for num in nums:
+            # Iterate backwards to reuse the same DP array (0/1 knapsack optimization)
+            for i in range(k - 1, num - 1, -1):
+                dp[i] = (dp[i] + dp[i - num]) % MOD
+        
+        # Sum all ways where the subset sum is less than k
+        invalid_subsets_count = sum(dp) % MOD
+        
+        # Great = Total - 2 * (ways to get sum < k)
+        # We add MOD before the final modulo to handle negative results
+        return (total_ways - 2 * invalid_subsets_count + MOD) % MOD
