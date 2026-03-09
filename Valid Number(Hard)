@@ -1,0 +1,35 @@
+class Solution:
+    def isNumber(self, s: str) -> bool:
+        seen_digit = False
+        seen_dot = False
+        seen_exponent = False
+        
+        for i, char in enumerate(s):
+            if char.isdigit():
+                seen_digit = True
+            
+            elif char in "+-":
+                # Sign must be at index 0 or immediately after 'e/E'
+                if i > 0 and s[i-1] not in "eE":
+                    return False
+            
+            elif char in "eE":
+                # Cannot have two exponents or an exponent without a leading digit
+                if seen_exponent or not seen_digit:
+                    return False
+                seen_exponent = True
+                # Reset seen_digit to ensure something follows the 'e/E'
+                seen_digit = False
+            
+            elif char == ".":
+                # Cannot have two dots or a dot inside/after an exponent
+                if seen_dot or seen_exponent:
+                    return False
+                seen_dot = True
+                
+            else:
+                # Any other character (like 'a' or ' ') is invalid
+                return False
+        
+        # Must end having seen at least one digit (to avoid ".", "1e", "+", etc.)
+        return seen_digit
